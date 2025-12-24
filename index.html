@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CTOS - Connexion</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0b0f14;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background-color: #111827;
+            padding: 25px;
+            border-radius: 10px;
+            width: 300px;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #00ffff;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background-color: #00ffff;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .info {
+            margin-top: 10px;
+            font-size: 12px;
+            text-align: center;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box">
+        <h1>CTOS</h1>
+
+        <input id="user" type="text" placeholder="Identifiant">
+        <input id="pass" type="password" placeholder="Mot de passe">
+
+        <button onclick="login()">Se connecter</button>
+
+        <div class="info">
+            Accès réservé aux autorités
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            let user = document.getElementById("user").value;
+            let pass = document.getElementById("pass").value;
+
+            if (user === "admin" && pass === "1234") {
+               window.location.href = "dashboard.html";
+            } else {
+                alert("Identifiant ou mot de passe incorrect");
+            }
+        }
+    </script>
+
+</body>
+</html>

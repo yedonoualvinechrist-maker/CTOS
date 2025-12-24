@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CTOS Dashboard</title>
+
+    <style>
+        body {
+            background:#0b0f14;
+            color:white;
+            font-family:Arial;
+            padding:10px;
+        }
+        .box {
+            border:1px solid #38bdf8;
+            padding:10px;
+            margin-bottom:10px;
+        }
+        button {
+            margin-right:5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <strong>🎛️ Centre de contrôle</strong><br><br>
+    <button onclick="changeZone('Cotonou')">Cotonou</button>
+    <button onclick="changeZone('Porto-Novo')">Porto-Novo</button>
+    <button onclick="changeZone('Parakou')">Parakou</button>
+</div>
+
+<div class="box" id="securityBox">
+    <strong>👁️ Niveau de sécurité</strong><br><br>
+    <div id="securityLevel" style="font-size:18px;">
+        Initialisation...
+    </div>
+</div>
+
+<div class="box">
+    <strong id="zoneTitle">Chargement...</strong>
+</div>
+
+<div class="box" id="mapBox">
+    <strong id="zoneTitleMap">🗺️ Carte CTOS</strong><br><br>
+ <div id="mapArea" style="
+    height:180px;
+    border:2px dashed #38bdf8;
+    padding:8px;
+    color:#38bdf8;
+">
+    <div id="alertsMap">Aucune alerte active</div>
+</div>
+</div>
+
+<div class="box">
+    <strong>📜 Journal</strong>
+    <div id="logs"></div>
+</div>
+
+<div class="box" id="statsBox">
+    <strong>📊 Statistiques</strong><br><br>
+    <div id="statsContent">
+        Total alertes : 0<br>
+        🟢 Incident mineur : 0<br>
+        🟡 Mouvement suspect : 0<br>
+        🔴 Intrusion détectée : 0
+    </div>
+</div>
+<script>
+let zoneActive = "Cotonou";
+
+let stats = {
+    total: 0,
+    "Incident mineur": 0,
+    "Mouvement suspect": 0,
+    "Intrusion détectée": 0
+};
+
+function updateStats(type){
+    stats.total += 1;
+    stats[type] += 1;
+
+    document.getElementById("statsContent").innerHTML =
+        `Total alertes : ${stats.total}<br>` +
+        `🟢 Incident mineur : ${stats["Incident mineur"]}<br>` +
+        `🟡 Mouvement suspect : ${stats["Mouvement suspect"]}<br>` +
+        `🔴 Intrusion détectée : ${stats["Intrusion détectée"]}`;
+}
+
+function updateZone(){
+    document.getElementById("zoneTitle").innerText =
+        "🗺️ CTOS — Zone " + zoneActive;
+
+    document.getElementById("zoneTitleMap").innerText =
+        "🗺️ Carte CTOS — " + zoneActive;
+
+    addLog("Zone active : " + zoneActive);
+}
+
+function changeZone(ville){
+    zoneActive = ville;
+    updateZone();
+}
+
+function addLog(msg){
+    document.getElementById("logs").innerHTML += msg + "<br>";
+}
+let alertLevels = [
+    {type:"Incident mineur", level:"🟢", color:"#22c55e"},
+    {type:"Mouvement suspect", level:"🟡", color:"#eab308"},
+    {type:"Intrusion détectée", level:"🔴", color:"#ef4444"}
+];
+
+function generateAlert(){
+    let a = alertLevels[Math.floor(Math.random()*alertLevels.length)];
+
+    let alertHTML = `
+        <div style="color:${a.color}; font-weight:bold;">
+            ${a.level} ${a.type} — ${zoneActive}
+        </div>
+    `;
+
+    document.getElementById("alertsMap").innerHTML = alertHTML;
+    addLog("Alerte générée : " + a.type + " (" + zoneActive + ")");
+
+    updateSecurityLevel(a.type);
+    updateStats(a.type);
+}
+function updateSecurityLevel(type){
+    let levelText = "FAIBLE";
+    let color = "#22c55e";
+
+    if(type === "Mouvement suspect"){
+        levelText = "MOYEN";
+        color = "#eab308";
+    }
+
+    if(type === "Intrusion détectée"){
+        levelText = "ÉLEVÉ";
+        color = "#ef4444";
+    }
+
+    let el = document.getElementById("securityLevel");
+    el.innerText = levelText;
+    el.style.color = color;
+}
+setInterval(generateAlert, 5000);
+updateZone();
+</script>
+
+</body>
+</html>
